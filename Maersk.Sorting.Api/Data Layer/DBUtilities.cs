@@ -23,7 +23,7 @@ namespace Maersk.Sorting.Api.DataLayer
                 sortj.id = job.Id.ToString();
                 sortj.status = job.Status.ToString();
                 sortj.input = string.Join(',', job.Input);
-                sortj.output = job.Output != null ? string.Join(',', job.Input) : "";
+                sortj.output = job.Output != null ? string.Join(',', job.Output) : "";
                 sortj.duration = job.Duration.HasValue ? job.Duration.Value.Ticks : 0;
 
                 _context.SortJobs.Update(sortj);

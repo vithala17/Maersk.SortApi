@@ -58,10 +58,12 @@ namespace Maersk.Sorting.Api.Controllers
         }
 
         [HttpGet("{jobId}")]
-        public Task<ActionResult<SortJob>> GetJob(Guid jobId)
+        public async Task<ActionResult<SortJob>> GetJob(Guid jobId)
         {
             // TODO: Should return a specific job by ID.
-            throw new NotImplementedException();
+            SortJob job = await _sortJobProcessor.GetSortJob(jobId.ToString());
+
+            return Ok(job);
         }
     }
 }

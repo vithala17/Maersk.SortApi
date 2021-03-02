@@ -29,7 +29,7 @@ namespace Maersk.Sorting.Api
 
             services.AddScoped<ISortJobProcessor, SortJobProcessor>();
             services.AddScoped<IDBUtilities, DBUtilities>();
-            services.AddHostedService<BackgroundWorker>();
+            //services.AddHostedService<BackgroundWorker>();
             services.AddDbContextPool<ApplicationDBContext>(options => options.UseSqlServer(Constants.ConnectionString));
         }
 
