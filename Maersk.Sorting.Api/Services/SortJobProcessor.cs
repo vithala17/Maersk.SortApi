@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Maersk.Sorting.Api.DataLayer;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,11 +9,13 @@ namespace Maersk.Sorting.Api
 {
     public class SortJobProcessor : ISortJobProcessor
     {
+        private IDBUtilities dBUtilities;
         private readonly ILogger<SortJobProcessor> _logger;
 
-        public SortJobProcessor(ILogger<SortJobProcessor> logger)
+        public SortJobProcessor(ILogger<SortJobProcessor> logger, IDBUtilities dBUtilities)
         {
-            _logger = logger;
+            this._logger = logger;
+            this.dBUtilities = dBUtilities;
         }
 
         public async Task<SortJob> Process(SortJob job)
@@ -33,6 +37,27 @@ namespace Maersk.Sorting.Api
                 duration: duration,
                 input: job.Input,
                 output: output);
+        }
+    
+        public async Task ProcessAsync(SortJob job)
+        {
+            await this.dBUtilities.WriteToDb(job);
+        }
+
+        public async Task<SortJob[]> GetSortJobs()
+        {
+            List<SortJob> listOfJobs = await dBUtilities.GetSortJobs();
+
+            SortJob[] arrayJobs = listOfJobs.ToArray<SortJob>();
+
+            return arrayJobs;
+        }
+
+        public Task<SortJob> GetSortJob(string id)
+        {
+            var job = dBUtilities.GetSortJob(id);
+
+            return job;
         }
     }
 }
